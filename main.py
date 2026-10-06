@@ -1,9 +1,3 @@
-# Unit 2 - Lesson 3
-# Angles, Rotation, and Directional Movement
-#
-# The spaceship rotates, moves in the direction it is facing,
-# wraps around the screen, and fires missiles forward.
-
 import math
 import random
 import pygame
@@ -62,7 +56,7 @@ for number in range(6):
 missiles = []
 
 # Slightly transparent panels keep the ship visible behind the HUD.
-hud_panel = pygame.Surface((310, 175), pygame.SRCALPHA)
+hud_panel = pygame.Surface((230, 62), pygame.SRCALPHA)
 pygame.draw.rect(hud_panel, (25, 32, 52, 175), hud_panel.get_rect(), border_radius=8)
 controls_panel = pygame.Surface((WIDTH - 20, 32), pygame.SRCALPHA)
 pygame.draw.rect(controls_panel, (25, 32, 52, 175), controls_panel.get_rect(), border_radius=8)
@@ -205,14 +199,6 @@ while running:
         ],
         2,
     )
-    pygame.draw.line(
-        screen,
-        RED,
-        enemy_position,
-        enemy_position + enemy_forward * 100,
-        3,
-    )
-
     # Draw the spaceship as a triangle facing the forward vector.
     left = forward.rotate(140)
     right = forward.rotate(-140)
@@ -220,16 +206,6 @@ while running:
     p2 = ship_position + left * 16
     p3 = ship_position + right * 16
     pygame.draw.polygon(screen, WHITE, [p1, p2, p3], 2)
-
-    # Show the ship's forward direction and velocity.
-    pygame.draw.line(screen, CYAN, ship_position, ship_position + forward * 55, 2)
-    pygame.draw.line(
-        screen,
-        YELLOW,
-        ship_position,
-        ship_position + ship_velocity * 10,
-        3,
-    )
 
     if keys[pygame.K_UP] or keys[pygame.K_w]:
         pygame.draw.circle(screen, YELLOW, ship_position - forward * 18, 5)
@@ -254,27 +230,15 @@ while running:
     screen.blit(hud_panel, (10, 10))
     screen.blit(controls_panel, (10, HEIGHT - 42))
 
-    angle_text = font.render(f"Angle: {ship_angle % 360:.0f}", True, WHITE)
-    vector_text = font.render(
-        f"Forward: ({forward.x:.2f}, {forward.y:.2f})",
-        True,
-        WHITE,
-    )
     speed_text = font.render(f"Speed: {ship_velocity.length():.2f}", True, WHITE)
-    distance_text = font.render(f"Distance: {distance:.1f}", True, WHITE)
-    dot_text = font.render(f"Dot Product: {dot:.2f}", True, WHITE)
-    state_text = font.render(
-        f"Enemy State: {enemy_state}",
+    phase_text = font.render(
+        f"Enemy Phase: {enemy_state}",
         True,
         RED if detected else WHITE,
     )
     controls_text = font.render("Left/Right or A/D: rotate   Up/W: thrust   Space: fire", True, WHITE)
-    screen.blit(angle_text, (15, 15))
-    screen.blit(vector_text, (15, 42))
-    screen.blit(speed_text, (15, 69))
-    screen.blit(state_text, (15, 96))
-    screen.blit(distance_text, (15, 123))
-    screen.blit(dot_text, (15, 150))
+    screen.blit(speed_text, (15, 15))
+    screen.blit(phase_text, (15, 42))
     screen.blit(controls_text, (15, HEIGHT - 32))
 
     pygame.display.flip()
